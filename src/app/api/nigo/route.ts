@@ -99,9 +99,9 @@ export async function POST() {
       }));
 
       await prisma.beatmap.upsert({
-        where: { id: set.id },
+        where: { bm_id: set.id },
         create: {
-          id: set.id,
+          bm_id: set.id,
           artist: set.artist_unicode || set.artist,
           title: set.title_unicode || set.title,
           title_en: set.title,

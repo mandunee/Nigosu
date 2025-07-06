@@ -12,6 +12,7 @@ generator client {
 
 model Beatmap {
   id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  bm_id       Int      @unique
   artist      String
   title       String
   title_en    String?
