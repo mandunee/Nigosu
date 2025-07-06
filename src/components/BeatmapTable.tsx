@@ -62,14 +62,13 @@ export default function BeatmapTable({ endpoint = "/api/beatmaps" }: Props) {
     <div className="max-w-4xl mx-auto mt-8 p-4 bg-[#36393f] rounded-lg shadow-lg text-sm md:text-base">
       <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-4 gap-2">
         <div className="flex gap-3 items-center">
-            <span className="text-white">Title:</span>
             <button
               onClick={() => setJp(true)}
-              className={`px-2 py-1 rounded-l ${jp ? "bg-indigo-600" : "bg-gray-600"} text-white`}
+              className={`px-3 py-2 rounded-l ${jp ? "bg-indigo-600" : "bg-gray-600"} text-white`}
             >JP</button>
             <button
               onClick={() => setJp(false)}
-              className={`px-2 py-1 rounded-r ${jp ? "bg-gray-600" : "bg-indigo-600"} text-white`}
+              className={`px-3 py-2 rounded-r ${jp ? "bg-gray-600" : "bg-indigo-600"} text-white`}
             >EN</button>
           
           <button
@@ -78,20 +77,9 @@ export default function BeatmapTable({ endpoint = "/api/beatmaps" }: Props) {
               await fetch('/api/nigo', { method: 'POST' });
               await fetch(endpoint).then(r=>r.json()).then(setData).finally(()=>setLoading(false));
             }}
-            className="px-3 py-2 bg-indigo-600 hover:bg-indigo-700 rounded text-white"
+            className="ml-auto px-3 py-2 bg-indigo-600 hover:bg-indigo-700 rounded text-white"
           >
             ↻
-          </button>
-          <button
-            onClick={async () => {
-              if(!confirm('Delete ALL beatmaps?')) return;
-              setLoading(true);
-              await fetch('/api/beatmaps/clear', { method: 'POST' });
-              await fetch(endpoint).then(r=>r.json()).then(setData).finally(()=>setLoading(false));
-            }}
-            className="px-3 py-2 bg-red-600 hover:bg-red-700 rounded text-white"
-          >
-            Clear
           </button>
           
         </div>
