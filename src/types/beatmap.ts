@@ -6,7 +6,14 @@ export interface Difficulty {
 }
 
 export interface Beatmap {
-  id: number;
+  /**
+   * Mongo document ObjectId (hex string)
+   */
+  id: string;
+  /**
+   * Numeric osu! beatmapset id – use this when generating hyperlinks.
+   */
+  bm_id: number;
   artist: string;
   title: string;
   title_en?: string;

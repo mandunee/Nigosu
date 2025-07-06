@@ -14,7 +14,7 @@ export default function BeatmapTable({ endpoint = "/api/beatmaps" }: Props) {
   const [jp, setJp] = useState<boolean>(true);
   const [data, setData] = useState<Beatmap[]>([]);
   const [loading, setLoading] = useState(false);
-  const [sortKey, setSortKey] = useState<SortKey>("id");
+  const [sortKey, setSortKey] = useState<SortKey>("bm_id");
   const [asc, setAsc] = useState<boolean>(false);
   const [filter, setFilter] = useState<string>("");
   const [page, setPage] = useState<number>(1);
@@ -193,7 +193,7 @@ function Row({ bm, jp }: { bm: Beatmap; jp: boolean }) {
               <div className="px-3 py-4 w-1/10 drop-shadow-[0_4px_16px_rgba(0,0,0,0.6)] truncate text-center">{bm.mode}</div>
               <div className="px-3 py-4 w-1/6 drop-shadow-[0_4px_16px_rgba(0,0,0,0.6)] truncate text-center">{bm.ranked_at}</div>
               <div className="px-3 py-4 w-1/12 flex justify-center items-center">
-                <a href={`https://osu.ppy.sh/beatmapsets/${bm.id}`} target="_blank" rel="noopener noreferrer" className="text-cyan-300 hover:text-cyan-200">
+                <a href={`https://osu.ppy.sh/beatmapsets/${bm.bm_id}`} target="_blank" rel="noopener noreferrer" className="text-cyan-300 hover:text-cyan-200">
                   <FaExternalLinkAlt />
                 </a>
               </div>
