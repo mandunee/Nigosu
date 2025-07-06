@@ -44,9 +44,9 @@ export async function POST(request: Request) {
         stars: b.difficulty_rating,
       }));
       await prisma.beatmap.upsert({
-        where: { id: set.id },
+        where: { bm_id: set.id },
         create: {
-          id: set.id,
+          bm_id: set.id,
           artist: set.artist,
           title: set.title,
           mapper: set.creator,
