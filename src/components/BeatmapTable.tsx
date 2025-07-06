@@ -187,11 +187,11 @@ function Row({ bm, jp }: { bm: Beatmap; jp: boolean }) {
             <div className="absolute inset-0 z-10 bg-black/20 pointer-events-none" />
 
             <div className="relative z-20 flex w-full">
-              <div className="px-3 py-4 w-1/2 drop-shadow-[0_4px_16px_rgba(0,0,0,0.6)] truncate">{titleDisplay}</div>
-              <div className="px-3 py-4 w-1/6 drop-shadow-[0_4px_16px_rgba(0,0,0,0.6)] truncate">{bm.mapper}</div>
-              <div className="px-3 py-4 w-1/10 drop-shadow-[0_4px_16px_rgba(0,0,0,0.6)] truncate text-center">{bm.length}</div>
-              <div className="px-3 py-4 w-1/10 drop-shadow-[0_4px_16px_rgba(0,0,0,0.6)] truncate text-center">{bm.mode}</div>
-              <div className="px-3 py-4 w-1/6 drop-shadow-[0_4px_16px_rgba(0,0,0,0.6)] truncate text-center">{bm.ranked_at}</div>
+              <div className="px-3 py-4 w-1/2 drop-shadow-[0_4px_24px_rgba(0,0,0,0.9)] truncate">{titleDisplay}</div>
+              <div className="px-3 py-4 w-1/6 drop-shadow-[0_4px_24px_rgba(0,0,0,0.9)] truncate">{bm.mapper}</div>
+              <div className="px-3 py-4 w-1/10 drop-shadow-[0_4px_24px_rgba(0,0,0,0.9)] truncate text-center">{bm.length}</div>
+              <div className="px-3 py-4 w-1/10 drop-shadow-[0_4px_24px_rgba(0,0,0,0.9)] truncate text-center">{bm.mode}</div>
+              <div className="px-3 py-4 w-1/6 drop-shadow-[0_4px_24px_rgba(0,0,0,0.9)] truncate text-center">{bm.ranked_at}</div>
               <div className="px-3 py-4 w-1/12 flex justify-center items-center">
                 <a href={`https://osu.ppy.sh/beatmapsets/${bm.bm_id}`} target="_blank" rel="noopener noreferrer" className="text-cyan-300 hover:text-cyan-200">
                   <FaExternalLinkAlt />
