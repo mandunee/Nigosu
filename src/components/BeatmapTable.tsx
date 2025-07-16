@@ -91,55 +91,60 @@ export default function BeatmapTable({ endpoint = "/api/beatmaps" }: Props) {
           </button>
         </div>
       </div>
-      <table className="w-full text-left border-separate border-spacing-y-3 table-fixed">
-        <thead>
-          <tr>
-            <th colSpan={6} className="p-0">
-              <div className="flex w-full text-left text-gray-200">
-                {[
-                  { k: "title", label: "Title", w: "w-5/12", sortable: true },
-                  { k: "mapper", label: "Mapper", w: "w-1/6", sortable: true },
-                  { k: "length", label: "Length", w: "w-1/12", sortable: true },
-                  { k: "mode", label: "Mode", w: "w-1/12", sortable: true },
-                  { k: "ranked_at", label: "Ranked", w: "w-1/6", sortable: true },
-                  { k: "link", label: "Link", w: "w-1/12", sortable: false },
-                ].map(({ k, label, w, sortable }) => (
-                  <div
-                    key={k}
-                    className={`${sortable ? "cursor-pointer" : ""} select-none px-3 py-2 ${w} overflow-visible`}
-                    onClick={() => sortable && handleSort(k as SortKey)}
-                  >
-                    <span className="inline-flex items-center gap-1">
-                      {label}
-                      {sortable && (sortKey !== k ? (
-                        <FaSort className="text-xs" />
-                      ) : asc ? (
-                        <FaSortUp className="text-xs" />
-                      ) : (
-                        <FaSortDown className="text-xs" />
-                      ))}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </th>
-          </tr>
-        </thead>
-        <AnimatePresence mode="wait">
-          <motion.tbody
-            key={page}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.3 }}
-            className="[&>tr_.main]:cursor-pointer"
-          >
+      {/* Header Row */}
+      <div className="hidden md:grid grid-cols-12 text-gray-200 mb-2 w-full">
+        <div className="cursor-pointer col-span-5 select-none px-3 py-2" onClick={() => handleSort("title") as any}>
+          <span className="inline-flex items-center gap-1">
+            Title
+            {sortKey !== "title" ? <FaSort className="text-xs" /> : asc ? <FaSortUp className="text-xs" /> : <FaSortDown className="text-xs" />}
+          </span>
+        </div>
+        <div className="cursor-pointer col-span-2 select-none px-3 py-2" onClick={() => handleSort("mapper") as any}>
+          <span className="inline-flex items-center gap-1">
+            Mapper
+            {sortKey !== "mapper" ? <FaSort className="text-xs" /> : asc ? <FaSortUp className="text-xs" /> : <FaSortDown className="text-xs" />}
+          </span>
+        </div>
+        <div className="cursor-pointer col-span-1 select-none px-3 py-2 text-center" onClick={() => handleSort("length") as any}>
+          <span className="inline-flex items-center gap-1">
+            Length
+            {sortKey !== "length" ? <FaSort className="text-xs" /> : asc ? <FaSortUp className="text-xs" /> : <FaSortDown className="text-xs" />}
+          </span>
+        </div>
+        <div className="cursor-pointer col-span-1 select-none px-3 py-2 text-center" onClick={() => handleSort("mode") as any}>
+          <span className="inline-flex items-center gap-1">
+            Mode
+            {sortKey !== "mode" ? <FaSort className="text-xs" /> : asc ? <FaSortUp className="text-xs" /> : <FaSortDown className="text-xs" />}
+          </span>
+        </div>
+        <div className="cursor-pointer col-span-2 select-none px-3 py-2 text-center" onClick={() => handleSort("ranked_at") as any}>
+          <span className="inline-flex items-center gap-1">
+            Ranked
+            {sortKey !== "ranked_at" ? <FaSort className="text-xs" /> : asc ? <FaSortUp className="text-xs" /> : <FaSortDown className="text-xs" />}
+          </span>
+        </div>
+        <div className="col-span-1 select-none px-3 py-2 text-center">
+          Link
+        </div>
+      </div>
+
+      {/* Data Rows */}
+      <AnimatePresence mode="wait" key={page}>
+        <motion.div
+          key={page}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -20 }}
+          transition={{ duration: 0.3 }}
+          className="space-y-3"
+        >
           {currentPageData.map((bm) => (
             <Row key={bm.id} bm={bm} jp={jp} />
           ))}
-        </motion.tbody>
-        </AnimatePresence>
-      </table>
+        </motion.div>
+      </AnimatePresence>
+
+      
 
       {/* Pagination */}
       {totalPages > 1 && (
@@ -168,7 +173,6 @@ export default function BeatmapTable({ endpoint = "/api/beatmaps" }: Props) {
 }
 
 function Row({ bm, jp }: { bm: Beatmap; jp: boolean }) {
-  console.debug('row bg', bm.id, bm.bg_url);
   const [open, setOpen] = useState(false);
   const beatmaps: Difficulty[] = bm.beatmaps_json ?? [];
   const titleDisplay = jp ? bm.title : bm.title_en ?? bm.title;
@@ -183,60 +187,62 @@ function Row({ bm, jp }: { bm: Beatmap; jp: boolean }) {
 
   return (
     <>
-      <tr onClick={() => setOpen(!open)}>
-        <td colSpan={6} className="p-0">
-          <div className={`relative rounded-md overflow-hidden shadow-lg hover:shadow-xl transition-shadow text-white ${bm.bg_url ? '' : 'bg-[#2e2f34]'}`}>
-            {/* blurred bg */}
-            {bm.bg_url && (
-              <div
-                className="absolute inset-0 z-0 bg-center bg-cover scale-110 blur-[3px] opacity-80"
-                style={{ backgroundImage: `url(${bm.bg_url})` }}
-              />
-            )}
-            {/* overlay to darken */}
-            <div className="absolute inset-0 z-10 bg-black/20 pointer-events-none" />
+      <div
+        onClick={() => setOpen(!open)}
+        className={`relative rounded-md overflow-hidden shadow-lg hover:shadow-xl transition-shadow text-white cursor-pointer ${bm.bg_url ? '' : 'bg-[#2e2f34]'}`}
+      >
+        {/* blurred bg */}
+        {bm.bg_url && (
+          <div
+            className="absolute inset-0 z-0 bg-center bg-cover scale-110 blur-[3px] opacity-80"
+            style={{ backgroundImage: `url(${bm.bg_url})` }}
+          />
+        )}
+        {/* overlay */}
+        <div className="absolute inset-0 z-10 bg-black/20 pointer-events-none" />
 
-            <div className="relative z-20 flex w-full">
-              <div className="px-3 py-4 w-5/12 [text-shadow:0_3px_8px_rgba(0,0,0,1)] truncate">{titleDisplay}</div>
-              <div className="px-3 py-4 w-1/6 [text-shadow:0_3px_8px_rgba(0,0,0,1)] truncate">{bm.mapper}</div>
-              <div className="px-3 py-4 w-1/12 [text-shadow:0_3px_8px_rgba(0,0,0,1)] truncate text-center">{bm.length}</div>
-              <div className="px-3 py-4 w-1/12 [text-shadow:0_3px_8px_rgba(0,0,0,1)] truncate text-center">{bm.mode}</div>
-              <div className="px-3 py-4 w-1/6 [text-shadow:0_3px_8px_rgba(0,0,0,1)] truncate text-center">{bm.ranked_at}</div>
-              <div className="px-3 py-4 w-1/12 flex justify-center items-center">
-                <a href={`https://osu.ppy.sh/beatmapsets/${bm.bm_id}`} target="_blank" rel="noopener noreferrer" className="text-cyan-300 hover:text-cyan-200">
-                  <FaExternalLinkAlt />
-                </a>
-              </div>
-            </div>
+        <div className="relative z-20 grid grid-cols-12 w-full">
+          <div className="px-3 py-4 col-span-5 truncate [text-shadow:0_3px_8px_rgba(0,0,0,1)]">{titleDisplay}</div>
+          <div className="px-3 py-4 col-span-2 truncate [text-shadow:0_3px_8px_rgba(0,0,0,1)]">{bm.mapper}</div>
+          <div className="px-3 py-4 col-span-1 truncate text-center [text-shadow:0_3px_8px_rgba(0,0,0,1)]">{bm.length}</div>
+          <div className="px-3 py-4 col-span-1 truncate text-center [text-shadow:0_3px_8px_rgba(0,0,0,1)]">{bm.mode}</div>
+          <div className="px-3 py-4 col-span-2 truncate text-center [text-shadow:0_3px_8px_rgba(0,0,0,1)]">{bm.ranked_at}</div>
+          <div className="px-3 py-4 col-span-1 flex justify-center items-center">
+            <a
+              href={`https://osu.ppy.sh/beatmapsets/${bm.bm_id}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-cyan-300 hover:text-cyan-200"
+            >
+              <FaExternalLinkAlt />
+            </a>
           </div>
-        </td>
-      </tr>
+        </div>
+      </div>
+
       <AnimatePresence initial={false}>
         {open && (
-        <motion.tr layout>
-          <td colSpan={6} className="pt-1">
-            <motion.div
-                 initial={{ height: 0, opacity: 0 }}
-                 animate={{ height: 'auto', opacity: 1 }}
-                 exit={{ height: 0, opacity: 0 }}
-                 transition={{ duration: 0.25 }}
-                 className="diff-card bg-[#2e2f34] rounded-md shadow-lg overflow-hidden"
-               >
-              {sortedDiff?.map((d) => (
-                <div
-                  key={d.id}
-                  className="flex justify-between items-center px-4 py-2 text-white font-medium text-sm border-b last:border-b-0 border-white/10"
-                >
-                  <span className="truncate max-w-[70%]">{d.version}</span>
-                  <span className="flex items-center gap-1 text-gold-400">
-                    <FaStar className="text-yellow-400" />
-                    {d.stars.toFixed(2)}
-                  </span>
-                </div>
-              ))}
-            </motion.div>
-           </td>
-          </motion.tr>
+          <motion.div
+            key="diff"
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.25 }}
+            className="diff-card bg-[#2e2f34] rounded-md shadow-lg overflow-hidden mt-1"
+          >
+            {sortedDiff?.map((d) => (
+              <div
+                key={d.id}
+                className="flex justify-between items-center px-4 py-2 text-white font-medium text-sm border-b last:border-b-0 border-white/10"
+              >
+                <span className="truncate max-w-[70%]">{d.version}</span>
+                <span className="flex items-center gap-1 text-gold-400">
+                  <FaStar className="text-yellow-400" />
+                  {d.stars.toFixed(2)}
+                </span>
+              </div>
+            ))}
+          </motion.div>
         )}
       </AnimatePresence>
     </>
